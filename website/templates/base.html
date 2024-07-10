@@ -11,6 +11,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Links to the Bootstrap CSS for styling -->
+     <!-- Google Fonts link for 'Pacifico' font -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" 
+      rel="stylesheet">
+
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -19,11 +23,66 @@
     />
     <!-- Placeholder for the title block, to be defined in child templates -->
     <title>{% block title %}{% endblock %}</title>
+    <style>
+      /* Custom CSS for a modern and creative background */
+      body {
+        background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Styling the navbar */
+      .navbar {
+        background: #003366; /* Navy blue background */
+      }
+
+      .navbar-nav .nav-link {
+        color: #fff; /* White text color */
+        font-weight: bold;
+      }
+
+      .navbar-nav .nav-link:hover {
+        color: #ffcc00; /* Yellow text color on hover */
+      }
+
+      .navbar-toggler {
+        border-color: #fff; /* White border color */
+      }
+
+      .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255, 255, 255, 1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+      }
+
+      /* Styling the container to stand out against the background */
+      .container {
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+        flex-grow: 1;
+      }
+
+      /* Styling flashed messages */
+      .alert {
+        margin-top: 20px;
+      }
+
+      /* Styling the logo */
+      .navbar-brand {
+        font-family: 'Pacifico', cursive; /* Example of a creative font */
+        font-size: 1.5rem;
+        color: #ffcc00; /* Yellow color */
+      }
+    </style>
   </head>
   <body>
     <!-- Navbar section with Bootstrap classes for styling -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
+        <!-- Logo for the site -->
+        <a class="navbar-brand" href="/">AfricaExplore</a>
         <!-- Button for toggling the navbar on small screens -->
         <button
           class="navbar-toggler"
@@ -35,14 +94,16 @@
         </button>
         <!-- Collapsible part of the navbar -->
         <div class="collapse navbar-collapse" id="navbar">
-          <div class="navbar-nav">
+          <div class="navbar-nav ms-auto">
             {% if user.is_authenticated %}
               <!-- Links to different sections of the site -->
               <a class="nav-item nav-link" href="/home">Home</a>
               <a class="nav-item nav-link" href="/logout">Logout</a>
-              {% else %}
+              <a class="nav-item nav-link" href="/make-post">Create a post </a>
+            {% else %}
               <a class="nav-item nav-link" href="/sign-up">Sign Up</a>
               <a class="nav-item nav-link" href="/login">Login</a>
+              
             {% endif %}
           </div>
         </div>

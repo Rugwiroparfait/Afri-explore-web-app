@@ -1,3 +1,78 @@
-{% extends "base.html"%}
-{% block title %}home{% endblock %}
-{% block content %} {% endblock%}
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<style>
+  body {
+    background: #f5f5f5;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: auto;
+  }
+
+  .post-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .post-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+  }
+
+  .post-card-header {
+    padding: 15px;
+    display: flex;
+    align-items: center;
+  }
+
+  .post-card-header img {
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .post-card-header .username {
+    font-weight: bold;
+    color: #333;
+  }
+
+  .post-card-body {
+    padding: 15px;
+    color: #555;
+    font-size: 1rem;
+  }
+
+  .post-card-footer {
+    padding: 10px 15px;
+    background: #fafafa;
+    font-size: 0.875rem;
+    color: #888;
+    border-top: 1px solid #eee;
+  }
+</style>
+<div class="container my-4">
+  <div class="row">
+    {% for post in posts|sort(attribute='date_created', reverse=True) %}
+    <div class="col-md-12 mb-4">
+      <div class="post-card">
+        <div class="post-card-header">
+          <img src="https://via.placeholder.com/40" alt="User Avatar">
+          <span class="username">{{ post.user.username }}</span>
+        </div>
+        <div class="post-card-body">
+          <p>{{ post.text }}</p>
+        </div>
+        <div class="post-card-footer">
+          Posted on {{ post.date_created.strftime('%Y-%m-%d') }}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
