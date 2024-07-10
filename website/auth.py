@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 import re
+import random
 from . import db
 from .models import User
 from flask_login import login_user, login_required, logout_user, current_user
@@ -74,18 +75,12 @@ def sign_up():
         elif not re.match(email_regex, email):
             flash('Email is not valid', category='error')
         else:
-            # Create a new user
-            new_user = User(
-                email=email,
-                username=username,
-                password=generate_password_hash(password1, method='pbkdf2:sha256')
-            )
-
-            # Add the new user to the database
+            avatar_url = f'https://api.adorable.io/avatars/285/{random.randint(1, 1000)}.png'
+            new_user = User(email=email, username=username, password=generate_password_hash(password1, method='pbkdf2:sha256'), avatar_url=avatar_url)
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)
-            flash('User Created', category='success')
+            flash('User created successfully!', category='success')
             return redirect(url_for('views.home'))
 
     return render_template("signup.html", user=current_user)

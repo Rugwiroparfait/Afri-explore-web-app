@@ -57,12 +57,10 @@ def delete_post(post_id):
         post_id (int): The ID of the post to be deleted.
     """
     post = Post.query.get_or_404(post_id)
-    
-    if post.user.id != current_user.id:
-        flash("You do not have permission to delete this post", category="error")
-        return redirect(url_for('views.home'))
-    
-    db.session.delete(post)
-    db.session.commit()
-    flash("Post deleted", category="success")
+    if post.author != current_user.id:
+        flash('You do not have permission to delete this post', category='error')
+    else:
+        db.session.delete(post)
+        db.session.commit()
+        flash('Post deleted', category='success')
     return redirect(url_for('views.home'))

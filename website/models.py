@@ -22,6 +22,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
     posts = db.relationship('Post', backref='user', passive_deletes=True)
+    avatar_url = db.Column(db.String(200)) 
 
 
 class Post(db.Model):
