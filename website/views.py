@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from flask_login import login_required, current_user
 from . import db
-from .models import Post
+from .models import Post, User
 
 # Define a Blueprint for view routes
 views = Blueprint("views", __name__)
@@ -64,3 +64,22 @@ def delete_post(post_id):
         db.session.commit()
         flash('Post deleted', category='success')
     return redirect(url_for('views.home'))
+
+
+@views.route("posts/<username>")
+@login_required
+def posts(username):
+    """
+    Handle the user's post s, one user profile
+
+    Args:
+        username (str): The username of the user whose posts we are going to watch.
+    """
+    user = User.query.filter_by(username=username).first()
+
+    if not user:
+        flash('No user with that name exists', category='error')
+        return redirect(url_for('views.home'))
+
+    posts = user.post
+    return render_template("post.html", user=current_user, posts=posts, username=username)

@@ -75,7 +75,7 @@ def sign_up():
         elif not re.match(email_regex, email):
             flash('Email is not valid', category='error')
         else:
-            avatar_url = f'https://api.adorable.io/avatars/285/{random.randint(1, 1000)}.png'
+            avatar_url = f'https://avatars.dicebear.com/api/initials/{username}.svg'
             new_user = User(email=email, username=username, password=generate_password_hash(password1, method='pbkdf2:sha256'), avatar_url=avatar_url)
             db.session.add(new_user)
             db.session.commit()
