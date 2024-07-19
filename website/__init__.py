@@ -38,7 +38,7 @@ def create_app():
     app.register_blueprint(auth, url_prefix="/")
     
     # Import the User model to ensure it is created in the database
-    from .models import User
+    from .models import User, Post, Comment
     
     # Create the database if it doesn't exist
     create_database(app)

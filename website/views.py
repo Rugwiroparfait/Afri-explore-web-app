@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from flask_login import login_required, current_user
 from . import db
-from .models import Post, User
+from .models import Post, User, Comment
 
 # Define a Blueprint for view routes
 views = Blueprint("views", __name__)
@@ -70,10 +70,10 @@ def delete_post(post_id):
 @login_required
 def posts(username):
     """
-    Handle the user's post s, one user profile
+    Handle the user's posts, one user profile.
 
     Args:
-        username (str): The username of the user whose posts we are going to watch.
+        username (str): The username of the user whose posts are to be displayed.
     """
     user = User.query.filter_by(username=username).first()
 
@@ -81,5 +81,66 @@ def posts(username):
         flash('No user with that name exists', category='error')
         return redirect(url_for('views.home'))
 
-    posts = user.post
+    posts = Post.query.filter_by(author=user.id).all()
     return render_template("post.html", user=current_user, posts=posts, username=username)
+
+
+@views.route('/comment/<int:post_id>', methods=['POST'])
+@login_required
+def comment(post_id):
+    """
+    Handle the submission of a comment.
+
+    Args:
+        post_id (int): The ID of the post to comment on.
+
+    Returns:
+        Redirects to the post view with the new comment.
+    """
+    text = request.form.get('text')
+    if not text:
+        flash('Comment cannot be empty.', category='error')
+    else:
+        new_comment = comment(text=text, author=current_user.id, post_id=post_id)
+        db.session.add(new_comment)
+        db.session.commit()
+        flash('Comment added.', category='success')
+
+    return redirect(url_for('views.posts', username=current_user.username))
+
+@views.route("/add_comment/<post_id>", methods=["POST"])
+@login_required
+def add_comment(post_id):
+    text = request.form.get("text")
+
+    if not text:
+        flash("Comment cannot be empty", category="error")
+    else:
+        post = Post.query.get(post_id)
+        if post:
+            comment = Comment(text=text, author=current_user.id, post_id=post.id)
+            db.session.add(comment)
+            db.session.commit()
+            flash("Comment added!", category="success")
+        else:
+            flash("Post not found", category="error")
+
+    return redirect(url_for("views.home"))
+
+@views.route("/delete_comment/<comment_id>", methods=["POST"])
+@login_required
+def delete_comment(comment_id):
+    comment = Comment.query.get(comment_id)
+    if comment:
+        if comment.user.id == current_user.id:
+            db.session.delete(comment)
+            db.session.commit()
+            flash("Comment deleted!", category="success")
+        else:
+            flash("You do not have permission to delete this comment", category="error")
+    else:
+        flash("Comment not found", category="error")
+    
+    return redirect(url_for("views.home"))
+
+

@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<style>
+  body {
+    background: #f5f5f5;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: auto;
+  }
+
+  .post-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .post-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+  }
+
+  .post-card-header {
+    padding: 15px;
+    display: flex;
+    align-items: center;
+  }
+
+  .post-card-header img {
+    border-radius: 50%;
+    margin-right: 10px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .post-card-header .username {
+    font-weight: bold;
+    color: #333;
+  }
+
+  .post-card-body {
+    padding: 15px;
+    color: #555;
+    font-size: 1rem;
+  }
+
+  .post-card-footer {
+    padding: 10px 15px;
+    background: #fafafa;
+    font-size: 0.875rem;
+    color: #888;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .comment-section {
+    margin-top: 20px;
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    display: none; /* Hide comments section initially */
+  }
+
+  .comment {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .comment:last-child {
+    border-bottom: none;
+  }
+
+  .comment img {
+    border-radius: 50%;
+    margin-right: 10px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .comment .username {
+    font-weight: bold;
+    margin-right: 10px;
+    color: #333;
+  }
+
+  .comment p {
+    margin: 0;
+    color: #555;
+  }
+
+  .comment .delete-form {
+    margin-left: auto;
+  }
+
+  .comment-form {
+    margin-top: 15px;
+  }
+
+  .comment-form textarea {
+    width: 100%;
+    border-radius: 8px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    resize: none;
+  }
+
+  .comment-form button {
+    margin-top: 10px;
+    padding: 8px 15px;
+    border-radius: 8px;
+    border: none;
+    background: #28a745;
+    color: #fff;
+  }
+
+  .comment-form button:hover {
+    background: #218838;
+  }
+
+  .show-comments {
+    cursor: pointer;
+    color: #007bff;
+  }
+
+  .show-comments:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<div class="container my-4">
+  <div class="row">
+    {% for post in posts|sort(attribute='date_created', reverse=True) %}
+    <div class="col-md-12 mb-4">
+      <div class="post-card">
+        <div class="post-card-header">
+          <a href="{{ url_for('views.posts', username=post.user.username) }}">
+            <img src="{{ post.user.avatar_url }}" alt="User Avatar">
+          </a>
+          <a href="{{ url_for('views.posts', username=post.user.username) }}" class="username">{{ post.user.username }}</a>
+          {% if post.user.id == current_user.id %}
+          <form method="POST" action="{{ url_for('views.delete_post', post_id=post.id) }}" style="margin-left: auto;">
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+          </form>
+          {% endif %}
+        </div>
+        <div class="post-card-body">
+          <p>{{ post.text }}</p>
+        </div>
+        <div class="post-card-footer">
+          <span>Posted on {{ post.date_created.strftime('%Y-%m-%d') }}</span>
+          <span class="show-comments" onclick="toggleComments({{ post.id }})">{{ post.comments|length }} {{ post.comments|length == 1 and 'comment' or 'comments' }}</span>
+        </div>
+
+        <!-- Comments Section -->
+        <div id="comments-{{ post.id }}" class="comment-section">
+          <h5>Comments</h5>
+          {% for comment in post.comments %}
+          <div class="comment">
+            <img src="{{ comment.user.avatar_url }}" alt="User Avatar">
+            <div>
+              <span class="username">{{ comment.user.username }}</span>
+              <p>{{ comment.text }}</p>
+            </div>
+            {% if comment.user.id == current_user.id %}
+            <form method="POST" action="{{ url_for('views.delete_comment', comment_id=comment.id) }}" class="delete-form">
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+            {% endif %}
+          </div>
+          {% endfor %}
+          <form method="POST" action="{{ url_for('views.add_comment', post_id=post.id) }}" class="comment-form">
+            <textarea name="text" rows="3" placeholder="Add a comment..." required></textarea>
+            <button type="submit">Post Comment</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  function toggleComments(postId) {
+    const commentsSection = document.getElementById(`comments-${postId}`);
+    commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+  }
+</script>
+{% endblock %}
