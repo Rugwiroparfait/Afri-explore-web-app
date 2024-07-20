@@ -2,6 +2,11 @@
 {% block title %}Login{% endblock %}
 {% block content %}
 <style>
+  body {
+    background: linear-gradient(120deg, #d3cce3 0%, #e9e4f0 100%);
+    color: #333;
+  }
+
   .login-container {
     max-width: 400px;
     margin: 50px auto;
@@ -20,17 +25,36 @@
   .login-container .form-control {
     border-radius: 5px;
     margin-bottom: 15px;
+    border: 1px solid #ccc;
+    padding: 10px;
   }
 
   .login-container .btn-primary {
     width: 100%;
     border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px;
   }
 
   .login-container .btn-primary:hover {
     background-color: #0056b3;
   }
+
+  .signup-link {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  .signup-link:hover {
+    text-decoration: underline;
+  }
 </style>
+
 <div class="container">
   <div class="login-container">
     <h3 align="center">Login</h3>
@@ -43,6 +67,7 @@
           name="email"
           class="form-control"
           placeholder="Enter Email"
+          required
         />
       </div>
       <div class="form-group">
@@ -53,21 +78,14 @@
           name="password"
           class="form-control"
           placeholder="Enter Password"
+          required
         />
       </div>
       <div align="center">
         <button class="btn btn-primary" type="submit">Login</button>
       </div>
+      <a href="{{ url_for('auth.sign_up') }}" class="signup-link">Don't have an account? Sign up here</a>
     </form>
   </div>
 </div>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    // Example: Add an event listener to the login button
-    const loginButton = document.querySelector('.btn-primary');
-    loginButton.addEventListener('click', function () {
-      alert('Logging in...');
-    });
-  });
-</script>
 {% endblock %}

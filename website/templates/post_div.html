@@ -4,7 +4,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
   body {
-    background: #f5f5f5;
+    background: linear-gradient(120deg, #d3cce3 0%, #e9e4f0 100%);
+    color: #333;
   }
 
   .container {
@@ -13,7 +14,7 @@
   }
 
   .post-card {
-    background: #fff;
+    background: #f8f9fa;
     border: 1px solid #ddd;
     border-radius: 8px;
     margin-bottom: 20px;
@@ -41,21 +42,21 @@
 
   .post-card-header .username {
     font-weight: bold;
-    color: #333;
+    color: #555;
   }
 
   .post-card-body {
     padding: 15px;
-    color: #555;
+    color: #000;
     font-size: 1rem;
   }
 
   .post-card-footer {
     padding: 10px 15px;
-    background: #fafafa;
+    background: #e9ecef;
     font-size: 0.875rem;
-    color: #888;
-    border-top: 1px solid #eee;
+    color: #666;
+    border-top: 1px solid #ddd;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -63,11 +64,11 @@
 
   .comment-section {
     margin-top: 20px;
-    background: #f9f9f9;
+    background: #f1f3f5;
     padding: 15px;
     border-radius: 8px;
     border: 1px solid #ddd;
-    display: none; /* Hide comments section initially */
+    display: none;
   }
 
   .comment {
@@ -91,12 +92,12 @@
   .comment .username {
     font-weight: bold;
     margin-right: 10px;
-    color: #333;
+    color: #555;
   }
 
   .comment p {
     margin: 0;
-    color: #555;
+    color: #333;
   }
 
   .comment .delete-form {
@@ -120,12 +121,12 @@
     padding: 8px 15px;
     border-radius: 8px;
     border: none;
-    background: #28a745;
+    background: #007bff;
     color: #fff;
   }
 
   .comment-form button:hover {
-    background: #218838;
+    background: #0056b3;
   }
 
   .show-comments {
@@ -149,6 +150,28 @@
 
   .fa-heart, .fa-comments, .fa-trash {
     margin-right: 5px;
+  }
+
+  .create-post-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .create-post-btn:hover {
+    background: #0056b3;
+    transform: scale(1.1);
   }
 </style>
 
@@ -230,4 +253,7 @@
           });
   }
 </script>
+<a href="/make-post" class="create-post-btn" alt="adding post button">
+  <i class="fas fa-plus"></i>
+</a>
 {% endblock %}
