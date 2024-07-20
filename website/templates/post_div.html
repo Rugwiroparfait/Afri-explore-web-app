@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
   body {
     background: #f5f5f5;
@@ -135,64 +136,98 @@
   .show-comments:hover {
     text-decoration: underline;
   }
+
+  .like-btn, .dislike-btn {
+    cursor: pointer;
+    color: #007bff;
+    margin-right: 10px;
+  }
+
+  .like-btn:hover, .dislike-btn:hover {
+    text-decoration: underline;
+  }
+
+  .fa-heart, .fa-comments, .fa-trash {
+    margin-right: 5px;
+  }
 </style>
 
 <div class="container my-4">
   <div class="row">
-    {% for post in posts|sort(attribute='date_created', reverse=True) %}
-    <div class="col-md-12 mb-4">
-      <div class="post-card">
-        <div class="post-card-header">
-          <a href="{{ url_for('views.posts', username=post.user.username) }}">
-            <img src="{{ post.user.avatar_url }}" alt="User Avatar">
-          </a>
-          <a href="{{ url_for('views.posts', username=post.user.username) }}" class="username">{{ post.user.username }}</a>
-          {% if post.user.id == current_user.id %}
-          <form method="POST" action="{{ url_for('views.delete_post', post_id=post.id) }}" style="margin-left: auto;">
-            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-          </form>
-          {% endif %}
-        </div>
-        <div class="post-card-body">
-          <p>{{ post.text }}</p>
-        </div>
-        <div class="post-card-footer">
-          <span>Posted on {{ post.date_created.strftime('%Y-%m-%d') }}</span>
-          <span class="show-comments" onclick="toggleComments({{ post.id }})">{{ post.comments|length }} {{ post.comments|length == 1 and 'comment' or 'comments' }}</span>
-        </div>
+      {% for post in posts|sort(attribute='date_created', reverse=True) %}
+      <div class="col-md-12 mb-4">
+          <div class="post-card">
+              <div class="post-card-header">
+                  <a href="{{ url_for('views.posts', username=post.user.username) }}">
+                      <img src="{{ post.user.avatar_url }}" alt="User Avatar">
+                  </a>
+                  <a href="{{ url_for('views.posts', username=post.user.username) }}" class="username">{{ post.user.username }}</a>
+                  {% if post.user.id == current_user.id %}
+                  <form method="POST" action="{{ url_for('views.delete_post', post_id=post.id) }}" style="margin-left: auto;">
+                      <button type="submit" class="btn btn-danger btn-sm">
+                          <i class="fas fa-trash"></i>
+                      </button>
+                  </form>
+                  {% endif %}
+              </div>
+              <div class="post-card-body">
+                  <p>{{ post.text }}</p>
+              </div>
+              <div class="post-card-footer">
+                  <div>
+                      <span class="like-btn" onclick="likePost({{ post.id }})">
+                          <i class="fas fa-heart"></i> {{ post.likes|length }}
+                      </span>
+                      <span class="show-comments" onclick="toggleComments({{ post.id }})">
+                          <i class="fas fa-comments"></i> {{ post.comments|length }} {{ post.comments|length == 1 and 'comment' or 'comments' }}
+                      </span>
+                  </div>
+              </div>
 
-        <!-- Comments Section -->
-        <div id="comments-{{ post.id }}" class="comment-section">
-          <h5>Comments</h5>
-          {% for comment in post.comments %}
-          <div class="comment">
-            <img src="{{ comment.user.avatar_url }}" alt="User Avatar">
-            <div>
-              <span class="username">{{ comment.user.username }}</span>
-              <p>{{ comment.text }}</p>
-            </div>
-            {% if comment.user.id == current_user.id %}
-            <form method="POST" action="{{ url_for('views.delete_comment', comment_id=comment.id) }}" class="delete-form">
-              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-            </form>
-            {% endif %}
+              <!-- Comments Section -->
+              <div id="comments-{{ post.id }}" class="comment-section">
+                  <h5>Comments</h5>
+                  {% for comment in post.comments %}
+                  <div class="comment">
+                      <img src="{{ comment.user.avatar_url }}" alt="User Avatar">
+                      <div>
+                          <span class="username">{{ comment.user.username }}</span>
+                          <p>{{ comment.text }}</p>
+                      </div>
+                      {% if comment.user.id == current_user.id %}
+                      <form method="POST" action="{{ url_for('views.delete_comment', comment_id=comment.id) }}" class="delete-form">
+                          <button type="submit" class="btn btn-danger btn-sm">
+                              <i class="fas fa-trash"></i>
+                          </button>
+                      </form>
+                      {% endif %}
+                  </div>
+                  {% endfor %}
+                  <form method="POST" action="{{ url_for('views.add_comment', post_id=post.id) }}" class="comment-form">
+                      <textarea name="text" rows="3" placeholder="Add a comment..." required></textarea>
+                      <button type="submit">Post Comment</button>
+                  </form>
+              </div>
           </div>
-          {% endfor %}
-          <form method="POST" action="{{ url_for('views.add_comment', post_id=post.id) }}" class="comment-form">
-            <textarea name="text" rows="3" placeholder="Add a comment..." required></textarea>
-            <button type="submit">Post Comment</button>
-          </form>
-        </div>
       </div>
-    </div>
-    {% endfor %}
+      {% endfor %}
   </div>
 </div>
 
 <script>
   function toggleComments(postId) {
-    const commentsSection = document.getElementById(`comments-${postId}`);
-    commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+      const commentsSection = document.getElementById(`comments-${postId}`);
+      commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+  }
+
+  function likePost(postId) {
+      fetch(`/like-post/${postId}`, { method: 'POST' })
+          .then(response => response.text())
+          .then(data => {
+              if (data === 'Liked' || data === 'Unliked') {
+                  location.reload();
+              }
+          });
   }
 </script>
 {% endblock %}

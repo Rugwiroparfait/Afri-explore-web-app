@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from flask_login import login_required, current_user
 from . import db
-from .models import Post, User, Comment
+from .models import Post, User, Comment, Like
 
 # Define a Blueprint for view routes
 views = Blueprint("views", __name__)
@@ -144,3 +144,19 @@ def delete_comment(comment_id):
     return redirect(url_for("views.home"))
 
 
+@views.route('/like-post/<int:post_id>', methods=['POST'])
+@login_required
+def like_post(post_id):
+    post = Post.query.get(post_id)
+    if post:
+        like = Like.query.filter_by(post_id=post_id, author=current_user.id).first()
+        if like:
+            db.session.delete(like)
+            db.session.commit()
+            return "Unliked", 200
+        else:
+            new_like = Like(post_id=post_id, author=current_user.id)
+            db.session.add(new_like)
+            db.session.commit()
+            return "Liked", 200
+    return "Post not found", 404
