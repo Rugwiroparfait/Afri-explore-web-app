@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user ,logout_user
+from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from .models import Post, User, Comment, Like
 
@@ -23,6 +24,20 @@ def home():
 @views.route("/dashboard", methods=['GET', 'POST'])
 @login_required
 def dashboard():
+    """
+    Dashboard view for the user to update their profile information.
+
+    This route handles both GET and POST requests. On a GET request, it renders the dashboard 
+    template with the current user's information. On a POST request, it updates the user's 
+    information based on the form input and commits the changes to the database.
+
+    Methods:
+        GET: Renders the dashboard template.
+        POST: Updates the user's profile information.
+
+    Returns:
+        Rendered template for the dashboard.
+    """
     if request.method == 'POST':
         new_username = request.form.get('username')
         new_email = request.form.get('email')
@@ -46,6 +61,20 @@ def dashboard():
 @views.route("/delete-account", methods=['POST'])
 @login_required
 def delete_account():
+    """
+    Route to delete the current user's account.
+
+    This route handles the deletion of the user's account, including all posts, comments, 
+    and likes associated with the user. It logs out the user and redirects them to the login 
+    page upon successful deletion.
+
+    Methods:
+        POST: Deletes the user's account and associated data.
+
+    Returns:
+        Redirects to the login page upon successful deletion.
+        Renders the dashboard template with an error message upon failure.
+    """
     user = User.query.filter_by(id=current_user.id).first()
     if user:
         # Delete all posts, comments, and likes associated with the user

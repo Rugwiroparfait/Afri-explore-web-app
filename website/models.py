@@ -62,6 +62,13 @@ class Comment(db.Model):
 
 
 class Like(db.Model):
+    """Like model to manage likes
+
+    Attributes:
+        id (int): Primary key for the comment.
+        text (str): Content of the comment.
+        date_created (datetime): The date and time when the comment was created
+    """
     id = db.Column(db.Integer, primary_key=True)
     author = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete="CASCADE"), nullable=False)
