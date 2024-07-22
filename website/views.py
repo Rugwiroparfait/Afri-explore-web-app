@@ -160,3 +160,31 @@ def like_post(post_id):
             db.session.commit()
             return "Liked", 200
     return "Post not found", 404
+
+@views.route("/edit-post/<int:post_id>", methods=['GET', 'POST'])
+@login_required
+def edit_post(post_id):
+    """
+    Handle the editing of a post.
+
+    Args:
+        post_id (int): The ID of the post to be edited.
+    """
+    post = Post.query.get_or_404(post_id)
+    if post.author != current_user.id:
+        flash('You do not have permission to edit this post', category='error')
+        return redirect(url_for('views.home'))
+
+    if request.method == 'POST':
+        text = request.form.get('text')
+
+        if not text:
+            flash('Post cannot be empty', category='error')
+        else:
+            post.text = text
+            db.session.commit()
+            flash('Post updated', category='success')
+            return redirect(url_for('views.home'))
+
+    return render_template('edit_post.html', user=current_user, post=post)
+

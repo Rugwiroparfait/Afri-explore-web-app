@@ -45,6 +45,37 @@
     color: #555;
   }
 
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    min-width: 120px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 8px;
+  }
+
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  .dropdown-content a:hover {
+    background-color: #f1f1f1;
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
   .post-card-body {
     padding: 15px;
     color: #000;
@@ -148,7 +179,7 @@
     text-decoration: underline;
   }
 
-  .fa-heart, .fa-comments, .fa-trash {
+  .fa-heart, .fa-comments, .fa-trash, .fa-edit, .fa-ellipsis-v {
     margin-right: 5px;
   }
 
@@ -186,11 +217,19 @@
                   </a>
                   <a href="{{ url_for('views.posts', username=post.user.username) }}" class="username">{{ post.user.username }}</a>
                   {% if post.user.id == current_user.id %}
-                  <form method="POST" action="{{ url_for('views.delete_post', post_id=post.id) }}" style="margin-left: auto;">
-                      <button type="submit" class="btn btn-danger btn-sm">
-                          <i class="fas fa-trash"></i>
-                      </button>
-                  </form>
+                  <div class="dropdown" style="margin-left: auto;">
+                      <i class="fas fa-ellipsis-v"></i>
+                      <div class="dropdown-content">
+                          <a href="{{ url_for('views.edit_post', post_id=post.id) }}">
+                              <i class="fas fa-edit"></i> Edit
+                          </a>
+                          <form method="POST" action="{{ url_for('views.delete_post', post_id=post.id) }}">
+                              <button type="submit" class="btn btn-link" style="color: inherit; padding: 0; text-align: left;">
+                                  <i class="fas fa-trash"></i> Delete
+                              </button>
+                          </form>
+                      </div>
+                  </div>
                   {% endif %}
               </div>
               <div class="post-card-body">

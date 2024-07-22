@@ -32,7 +32,7 @@
     <title>{% block title %}{% endblock %}</title>
 
     <style>
-      /* Custom CSS for a modern and creative background */
+      /* personal custom css*/
       body {
         background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
         min-height: 100vh;
@@ -90,10 +90,12 @@
   </head>
   <body>
     <!-- Navbar section with Bootstrap classes for styling -->
-    <nav class="navbar navbar-expand-lg">
+    
+    <header>
+      <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
         <!-- Logo for the site -->
-        <a class="navbar-brand" href="/">AfricaExplore</a>
+        <a class="navbar-brand" href="/">AfriExplore</a>
         <!-- Button for toggling the navbar on small screens -->
         <button
           class="navbar-toggler"
@@ -117,7 +119,8 @@
           </div>
         </div>
       </div>
-    </nav>
+    </nav></header>
+  
 
     <!-- Block to handle flashed messages, such as errors and successes -->
     {% with messages = get_flashed_messages(with_categories=True) %}
