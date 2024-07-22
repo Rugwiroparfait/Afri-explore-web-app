@@ -20,6 +20,63 @@ def home():
     posts = Post.query.all()
     return render_template("home.html", user=current_user, posts=posts)
 
+@views.route("/dashboard", methods=['GET', 'POST'])
+@login_required
+def dashboard():
+    if request.method == 'POST':
+        new_username = request.form.get('username')
+        new_email = request.form.get('email')
+        new_password = request.form.get('password')
+        new_avatar = request.form.get('avatar')
+
+        if new_username:
+            current_user.username = new_username
+        if new_email:
+            current_user.email = new_email
+        if new_password:
+            current_user.password = generate_password_hash(new_password, method='sha256')
+        if new_avatar:
+            current_user.avatar_url = new_avatar
+
+        db.session.commit()
+        flash('Account updated successfully', category='success')
+
+    return render_template("dashboard.html", user=current_user)
+
+@views.route("/delete-account", methods=['POST'])
+@login_required
+def delete_account():
+    user = User.query.filter_by(id=current_user.id).first()
+    if user:
+        # Delete all posts, comments, and likes associated with the user
+        posts = Post.query.filter_by(author=user.id).all()
+        for post in posts:
+            comments = Comment.query.filter_by(post_id=post.id).all()
+            for comment in comments:
+                db.session.delete(comment)
+            likes = Like.query.filter_by(post_id=post.id).all()
+            for like in likes:
+                db.session.delete(like)
+            db.session.delete(post)
+        
+        # Delete comments and likes that the user has made
+        comments = Comment.query.filter_by(author=user.id).all()
+        for comment in comments:
+            db.session.delete(comment)
+        likes = Like.query.filter_by(author=user.id).all()
+        for like in likes:
+            db.session.delete(like)
+
+        # Delete the user
+        db.session.delete(user)
+        db.session.commit()
+        logout_user()
+        flash('Account deleted successfully', category='success')
+        return redirect(url_for('auth.login'))
+
+    flash('Account deletion failed', category='error')
+    return redirect(url_for('views.dashboard'))
+
 
 @views.route("/make-post", methods=['GET', 'POST'])
 @login_required

@@ -75,7 +75,8 @@ def sign_up():
         elif not re.match(email_regex, email):
             flash('Email is not valid', category='error')
         else:
-            avatar_url = f'https://avatars.dicebear.com/api/initials/{username}.svg'
+            avatar_seed = random.choice(['Bob', 'Ginger', 'Charlie', 'Annie','Buster','Abby'])
+            avatar_url = f'https://api.dicebear.com/9.x/adventurer/svg?seed={avatar_seed}'
             new_user = User(email=email, username=username, password=generate_password_hash(password1, method='pbkdf2:sha256'), avatar_url=avatar_url)
             db.session.add(new_user)
             db.session.commit()

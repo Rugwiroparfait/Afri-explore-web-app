@@ -112,9 +112,11 @@
               <!-- Links to different sections of the site -->
               <a class="nav-item nav-link" href="/home">Home</a>
               <a class="nav-item nav-link" href="/logout">Logout</a>
+              <a class="nav-link" href="{{ url_for('views.dashboard') }}">Profile</a>
             {% else %}
               <a class="nav-item nav-link" href="/sign-up">Sign Up</a>
               <a class="nav-item nav-link" href="/login">Login</a>
+              
             {% endif %}
           </div>
         </div>
