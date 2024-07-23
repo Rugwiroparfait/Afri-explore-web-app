@@ -82,8 +82,7 @@ Contributions are welcome! If you have any suggestions, bug reports, or improvem
 
 ## Licensing
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
+This Project is owned by ALX Africe
 ## Authors
 
 - **NSANZIMANA RUGWIRO Dominique Parfait**
