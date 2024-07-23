@@ -8,8 +8,9 @@ AfriExplore is a web application built with Flask for sharing and exploring adve
 
 AfriExplore is designed to connect adventurers and explorers with the beauty and diversity of Africa. Users can post their adventures, explore others' experiences, and interact through comments and likes.
 
-- **Deployed Site:** [AfriExplore](#) <!-- Add your deployed site link here -->
-- **Project Blog Article:** [Final Project Blog](#) <!-- Add your blog article link here -->
+- **Landing Page:** [AfriExplore](https://rugwiro.my.canva.site/afri-explore-landing-page#features) 
+- - **Deployed Site:** [AfriExplore](#)
+- **Project Blog Article:** [Final Project Blog](#)
 - **Author's LinkedIn:** [NSANZIMANA RUGWIRO Dominique Parfait](https://www.linkedin.com/in/nsanzimana-rugwiro-dominique-parfait/)
 
 ## Features
@@ -82,7 +83,7 @@ Contributions are welcome! If you have any suggestions, bug reports, or improvem
 
 ## Licensing
 
-This Project is owned by ALX Africe
+This Project is owned by ALX Africa
 ## Authors
 
 - **NSANZIMANA RUGWIRO Dominique Parfait**
