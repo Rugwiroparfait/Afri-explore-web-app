@@ -10,7 +10,7 @@ AfriExplore is designed to connect adventurers and explorers with the beauty and
 
 - **Landing Page:** [AfriExplore](https://rugwiro.my.canva.site/afri-explore) 
 - **Deployed Site:** [AfriExplore](http://54.236.51.195)
-- **Project Blog Article:** [Final Project Blog](#)
+- **Project Blog Article:** [Final Project Blog](https://www.linkedin.com/posts/nsanzimana-rugwiro-dominique-parfait-a3ba9122a_introducing-afriexplore-enhancing-travel-activity-7221464676805541888-lOzh?utm_source=share&utm_medium=member_desktop)
 - **Author's LinkedIn:** [NSANZIMANA RUGWIRO Dominique Parfait](https://www.linkedin.com/in/nsanzimana-rugwiro-dominique-parfait/)
 
 ## Features
