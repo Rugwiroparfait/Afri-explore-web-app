@@ -35,7 +35,7 @@ To run AfriExplore locally, follow these steps:
 1. **Clone the repository:**
 
    ```bash
-   git clone <https://github.com/Rugwiroparfait/Afri-explore-web-app>
+   git clone https://github.com/Rugwiroparfait/Afri-explore-web-app
    cd AfriExplore
    ```
 
